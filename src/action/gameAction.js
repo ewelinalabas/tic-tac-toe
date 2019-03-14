@@ -1,12 +1,13 @@
-const FETCH_ITEMS_LIST = "FETCH_ITEMS_LIST"
+const UPDATE_BOARD = "UPDATE_BOARD"
 
-const fetchItemsList = data => {
+export const updateBoard = (row, column, mark) => {
     return {
-        type: FETCH_ITEMS_LIST,
-        payload: data
+        type: UPDATE_BOARD,
+        row,
+        column,
+        mark
     }
 }
-
 // export const fetchItemsListAsync = () => {
 //     return dispatch => {
 //         return API.fetchItems().then(data => dispatch(fetchItemsList(data)))
