@@ -8,10 +8,12 @@ class Row extends Component {
             <tr>
                 {this.props.fields.map((f, i) =>
                     <Field
+                        key={i}
                         mark={f.mark}
                         column={i}
                         row={this.props.row}
                         handleClick={this.props.handleClick}
+                        currentTurn={this.props.currentTurn}
                     />
                 )}
             </tr>
@@ -21,10 +23,13 @@ class Row extends Component {
 
 class Field extends Component {
     render() {
+        const turnSign = this.props.currentTurn ? '†' : 'O';
         return (
             <td
                 style={{ border: '1px solid black', width: '30px', height: '30px' }}
-                onClick={() => {this.props.handleClick(this.props.row, this.props.column, this.props.mark)}}
+                onClick={() => {
+                    if (!this.props.mark) this.props.handleClick(this.props.row, this.props.column, turnSign)
+                }}
             >
                 {this.props.mark}
             </td>
@@ -40,14 +45,24 @@ class BoardPure extends Component {
     render() {
         return (
             <table>
-                {this.props.board.map((r, i) => <Row fields={r} row={i} handleClick={this.handleClick.bind(this)} />)}
+                <tbody>
+                    {this.props.board.map((r, i) =>
+                        <Row 
+                            key={i}
+                            fields={r}
+                            row={i}
+                            handleClick={this.handleClick.bind(this)}
+                            currentTurn={this.props.currentTurn}
+                        />
+                    )}
+                </tbody>
             </table>
         )
     }
 }
 
 export const Board = connect(
-    state => ({ board: state }),
+    state => ({ board: state.board, currentTurn: state.currentTurn }),
     dispatch => ({
         makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark))
     })
