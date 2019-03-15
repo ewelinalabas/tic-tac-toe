@@ -1,0 +1,1 @@
+export const transpose = array => (array[0].map((col, i) => array.map(row => row[i])));

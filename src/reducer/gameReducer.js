@@ -1,4 +1,5 @@
 import { getKeyByValue } from '../utils/object';
+import { transpose } from '../utils/array';
 
 const initialState = {
   board: [
@@ -40,6 +41,10 @@ const checkLine = line => {
 }
 
 const validateWin = board => {
-  const winner = board.map(checkLine).filter(el => el)[0]
+  const validatedRows = board.map(checkLine)
+  const validatedColumns = transpose(board).map(checkLine)
+  const validatedCrosses = [[board[0][0], board[1][1], board[2][2]], [board[0][2], board[1][1], board[2][0]]].map(checkLine)
+  const validatedAll = validatedRows.concat(validatedColumns).concat(validatedCrosses)
+  const winner = validatedAll.filter(el => el)[0]
   console.log(`Winner is ${winner}`)
 }
