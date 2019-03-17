@@ -3,67 +3,80 @@ import { connect } from 'react-redux';
 import { updateBoard } from './action/gameAction'
 
 class Row extends Component {
-    render() {
-        return (
-            <tr>
-                {this.props.fields.map((f, i) =>
-                    <Field
-                        key={i}
-                        mark={f.mark}
-                        column={i}
-                        row={this.props.row}
-                        handleClick={this.props.handleClick}
-                        currentTurn={this.props.currentTurn}
-                    />
-                )}
-            </tr>
-        )
-    }
+  render() {
+    return (
+      <tr>
+        {this.props.fields.map((f, i) =>
+          <Field
+            key={i}
+            mark={f.mark}
+            column={i}
+            row={this.props.row}
+            handleClick={this.props.handleClick}
+            currentTurn={this.props.currentTurn}
+          />
+        )}
+      </tr>
+    )
+  }
 };
 
 class Field extends Component {
-    render() {
-        const turnSign = this.props.currentTurn ? '†' : 'O';
-        return (
-            <td
-                style={{ border: '1px solid black', width: '30px', height: '30px' }}
-                onClick={() => {
-                    if (!this.props.mark) this.props.handleClick(this.props.row, this.props.column, turnSign)
-                }}
-            >
-                {this.props.mark}
-            </td>
-        )
-    }
+  render() {
+    const turnSign = this.props.currentTurn ? '†' : 'O';
+    return (
+      <td
+        style={{ border: '1px solid black', width: '30px', height: '30px' }}
+        onClick={() => {
+          if (!this.props.mark) this.props.handleClick(this.props.row, this.props.column, turnSign)
+        }}
+      >
+        {this.props.mark}
+      </td>
+    )
+  }
 };
 
-class BoardPure extends Component {
-    handleClick(row, column, mark) {
-        this.props.makeDecision(row, column, mark)
-    }
+class EndGameMessage extends Component {
+  render() {
+    return (
+      <h1>The winner is: {this.props.winner}</h1>
+    )
+  }
+}
 
-    render() {
-        return (
-            <table>
-                <tbody>
-                    {this.props.board.map((r, i) =>
-                        <Row 
-                            key={i}
-                            fields={r}
-                            row={i}
-                            handleClick={this.handleClick.bind(this)}
-                            currentTurn={this.props.currentTurn}
-                        />
-                    )}
-                </tbody>
-            </table>
-        )
-    }
+class BoardPure extends Component {
+  handleClick(row, column, mark) {
+    this.props.makeDecision(row, column, mark)
+  }
+
+  render() {
+    return (
+      <div>
+        <table>
+          <tbody>
+            {this.props.board.map((r, i) =>
+              <Row
+                key={i}
+                fields={r}
+                row={i}
+                handleClick={this.handleClick.bind(this)}
+                currentTurn={this.props.currentTurn}
+              />
+            )}
+          </tbody>
+        </table>
+        
+        {this.props.winner && <EndGameMessage winner={this.props.winner} />}
+        
+      </div>
+    )
+  }
 }
 
 export const Board = connect(
-    state => ({ board: state.board, currentTurn: state.currentTurn }),
-    dispatch => ({
-        makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark))
-    })
+  state => ({ board: state.board, currentTurn: state.currentTurn, winner: state.winner }),
+  dispatch => ({
+    makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark))
+  })
 )(BoardPure)
