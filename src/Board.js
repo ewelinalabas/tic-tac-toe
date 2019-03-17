@@ -28,7 +28,7 @@ class Field extends Component {
       <td
         style={{ border: '1px solid black', width: '30px', height: '30px' }}
         onClick={() => {
-          if (!this.props.mark) this.props.handleClick(this.props.row, this.props.column, turnSign)
+          this.props.handleClick(this.props.row, this.props.column, this.props.mark, turnSign)
         }}
       >
         {this.props.mark}
@@ -46,8 +46,8 @@ class EndGameMessage extends Component {
 }
 
 class BoardPure extends Component {
-  handleClick(row, column, mark) {
-    this.props.makeDecision(row, column, mark)
+  handleClick(row, column, mark, currentSign) {
+    if (!this.props.winner && !mark) {this.props.makeDecision(row, column, currentSign)}
   }
 
   render() {
@@ -66,7 +66,7 @@ class BoardPure extends Component {
             )}
           </tbody>
         </table>
-        
+
         {this.props.winner && <EndGameMessage winner={this.props.winner} />}
         
       </div>

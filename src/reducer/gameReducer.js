@@ -37,7 +37,6 @@ const checkLine = line => {
         marks[m] ? marks[m] += 1 : marks[m] = 1;
         return marks
       }, {});
-      
   return getKeyByValue(countedMarks, 3)
 }
 
