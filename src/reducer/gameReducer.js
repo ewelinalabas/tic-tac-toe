@@ -16,13 +16,15 @@ export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_BOARD':
       return updateField(action.row, action.column, action.mark, state);
+    case 'RESET_BOARD':
+      return {...initialState};
     default:
       return state;
   }
 }
 
 const updateField = (row, column, mark, state) => {
-  const newBoard = [...state.board]
+  const newBoard = JSON.parse(JSON.stringify(state.board));
   newBoard[row][column].mark = mark
   const winner = validateWin(newBoard)
   return { ...state, board: newBoard, currentTurn: !state.currentTurn, winner: winner }

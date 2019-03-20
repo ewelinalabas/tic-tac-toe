@@ -1,4 +1,5 @@
 const UPDATE_BOARD = "UPDATE_BOARD"
+const RESET_BOARD = "RESET_BOARD"
 
 export const updateBoard = (row, column, mark) => {
     return {
@@ -6,6 +7,12 @@ export const updateBoard = (row, column, mark) => {
         row,
         column,
         mark
+    }
+}
+
+export const resetBoard = () => {
+    return {
+        type: RESET_BOARD
     }
 }
 // export const fetchItemsListAsync = () => {

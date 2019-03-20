@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateBoard } from './action/gameAction'
+import { updateBoard, resetBoard } from './action/gameAction'
 
 class Row extends Component {
   render() {
@@ -67,8 +67,13 @@ class BoardPure extends Component {
           </tbody>
         </table>
 
-        {this.props.winner && <EndGameMessage winner={this.props.winner} />}
-        
+        {this.props.winner ?             
+          <div>
+            <EndGameMessage winner={this.props.winner} />
+            <button type="button" onClick={this.props.resetGame}>New game</button>
+          </div>
+          : null
+        }
       </div>
     )
   }
@@ -77,6 +82,7 @@ class BoardPure extends Component {
 export const Board = connect(
   state => ({ board: state.board, currentTurn: state.currentTurn, winner: state.winner }),
   dispatch => ({
-    makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark))
+    makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark)),
+    resetGame: () => dispatch(resetBoard())
   })
 )(BoardPure)
