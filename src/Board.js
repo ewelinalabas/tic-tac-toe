@@ -45,6 +45,18 @@ class EndGameMessage extends Component {
   }
 }
 
+class ScoreTable extends Component {
+  render() {
+    return (
+      <div>
+        <h3>Scoreboard</h3>
+        <p>†: {this.props.score.cross}</p>
+        <p>O: {this.props.score.circle}</p>
+      </div>
+    )
+  }
+}
+
 class BoardPure extends Component {
   handleClick(row, column, mark, currentSign) {
     if (!this.props.winner && !mark) {this.props.makeDecision(row, column, currentSign)}
@@ -66,6 +78,7 @@ class BoardPure extends Component {
             )}
           </tbody>
         </table>
+        <ScoreTable score={this.props.score}/>
 
         {this.props.winner ?             
           <div>
@@ -80,7 +93,7 @@ class BoardPure extends Component {
 }
 
 export const Board = connect(
-  state => ({ board: state.board, currentTurn: state.currentTurn, winner: state.winner }),
+  state => ({ board: state.board, currentTurn: state.currentTurn, winner: state.winner, score: state.score }),
   dispatch => ({
     makeDecision: (row, column, mark) => dispatch(updateBoard(row, column, mark)),
     resetGame: () => dispatch(resetBoard())

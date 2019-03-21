@@ -8,7 +8,11 @@ const initialState = {
     [{ mark: null }, { mark: null }, { mark: null }]
   ],
   currentTurn: true,
-  winner: null
+  winner: null,
+  score: {
+    cross: 0,
+    circle: 0
+  }
 }
 
 export const gameReducer = (state = initialState, action) => {
@@ -17,7 +21,7 @@ export const gameReducer = (state = initialState, action) => {
     case 'UPDATE_BOARD':
       return updateField(action.row, action.column, action.mark, state);
     case 'RESET_BOARD':
-      return {...initialState};
+      return {...initialState, score: state.score};
     default:
       return state;
   }
@@ -27,7 +31,8 @@ const updateField = (row, column, mark, state) => {
   const newBoard = JSON.parse(JSON.stringify(state.board));
   newBoard[row][column].mark = mark
   const winner = validateWin(newBoard)
-  return { ...state, board: newBoard, currentTurn: !state.currentTurn, winner: winner }
+  const newScore = updateScore(state.score, winner)
+  return { ...state, board: newBoard, currentTurn: !state.currentTurn, winner: winner, score: newScore }
 }
 
 const checkLine = line => {
@@ -49,4 +54,10 @@ const validateWin = board => {
   const validatedAll = validatedRows.concat(validatedColumns).concat(validatedCrosses)
   const winner = validatedAll.filter(el => el)[0]
   return winner
+}
+
+const updateScore = (score, winner) => {
+  if(!winner) { return {...score}}
+  else if(winner == '†') {const points = score.cross + 1; return {...score, cross: points}}
+  else {const points = score.circle + 1; return {...score, circle: points}}
 }
