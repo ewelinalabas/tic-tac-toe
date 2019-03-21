@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Board.css';
 import { connect } from 'react-redux';
 import { updateBoard, resetBoard } from './action/gameAction'
 
@@ -26,7 +27,7 @@ class Field extends Component {
     const turnSign = this.props.currentTurn ? '†' : 'O';
     return (
       <td
-        style={{ border: '1px solid black', width: '30px', height: '30px' }}
+        class="Field"
         onClick={() => {
           this.props.handleClick(this.props.row, this.props.column, this.props.mark, turnSign)
         }}
@@ -59,34 +60,38 @@ class ScoreTable extends Component {
 
 class BoardPure extends Component {
   handleClick(row, column, mark, currentSign) {
-    if (!this.props.winner && !mark) {this.props.makeDecision(row, column, currentSign)}
+    if (!this.props.winner && !mark) { this.props.makeDecision(row, column, currentSign) }
   }
 
   render() {
     return (
-      <div>
-        <table>
-          <tbody>
-            {this.props.board.map((r, i) =>
-              <Row
-                key={i}
-                fields={r}
-                row={i}
-                handleClick={this.handleClick.bind(this)}
-                currentTurn={this.props.currentTurn}
-              />
-            )}
-          </tbody>
-        </table>
-        <ScoreTable score={this.props.score}/>
+      <div class="row">
+        <div class="col-4">
+          <ScoreTable score={this.props.score} />
 
-        {this.props.winner ?             
-          <div>
-            <EndGameMessage winner={this.props.winner} />
-            <button type="button" onClick={this.props.resetGame}>New game</button>
-          </div>
-          : null
-        }
+          {this.props.winner ?
+            <div>
+              <EndGameMessage winner={this.props.winner} />
+              <button type="button" onClick={this.props.resetGame}>New game</button>
+            </div>
+            : null
+          }
+        </div>
+        <div class="col-8">
+          <table>
+            <tbody>
+              {this.props.board.map((r, i) =>
+                <Row
+                  key={i}
+                  fields={r}
+                  row={i}
+                  handleClick={this.handleClick.bind(this)}
+                  currentTurn={this.props.currentTurn}
+                />
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   }
